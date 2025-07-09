@@ -1,9 +1,14 @@
 import { Module } from '@nestjs/common';
-import { SeguimientoService } from './seguimiento.service';
+import { MongooseModule } from '@nestjs/mongoose';
+import { SeguimientoSchema } from './seguimiento.schema';
 import { SeguimientoController } from './seguimiento.controller';
+import { SeguimientoService } from './seguimiento.service';
 
 @Module({
+  imports: [
+    MongooseModule.forFeature([{ name: 'Seguimiento', schema: SeguimientoSchema }]),
+  ],
+  controllers: [SeguimientoController],
   providers: [SeguimientoService],
-  controllers: [SeguimientoController]
 })
 export class SeguimientoModule {}
