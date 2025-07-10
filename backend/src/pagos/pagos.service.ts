@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Pago } from './pago.entity';
+import { CreatePagoDto } from './dto/create-pago.dto';
 
 @Injectable()
 export class PagosService {
@@ -23,17 +24,15 @@ export class PagosService {
     });
   }
 
-  async create(data: Partial<Pago>) {
-    const pago = this.pagosRepo.create(data);
-    return this.pagosRepo.save(pago);
-  }
+  async create(data: CreatePagoDto) {
+  const pago = this.pagosRepo.create({
+    ...data,
+    paciente: { id: data.paciente },
+    plan: { id: data.plan },
+  });
+  return this.pagosRepo.save(pago);
+}
 
-  async update(id: number, data: Partial<Pago>) {
-    await this.pagosRepo.update(id, data);
-    const updated = await this.pagosRepo.findOneBy({ id });
-    if (!updated) throw new NotFoundException('Pago no encontrado');
-    return updated;
-  }
 
   async remove(id: number) {
     const deleted = await this.pagosRepo.delete(id);

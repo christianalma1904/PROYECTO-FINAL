@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { CreateDietaDto } from './dto/create-dieta.dto';
 
 @Injectable()
 export class DietasService {
@@ -16,12 +17,12 @@ export class DietasService {
     return doc;
   }
 
-  create(data: any) {
+  create(data: CreateDietaDto) { // <-- Usa tu DTO aquí
     const nueva = new this.dietaModel(data);
     return nueva.save();
   }
 
-  async update(id: string, data: any) {
+  async update(id: string, data: CreateDietaDto) { // <-- Usa tu DTO aquí
     const updated = await this.dietaModel.findByIdAndUpdate(id, data, { new: true });
     if (!updated) throw new NotFoundException('Dieta no encontrada');
     return updated;

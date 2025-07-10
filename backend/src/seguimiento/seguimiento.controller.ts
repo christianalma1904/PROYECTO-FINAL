@@ -1,6 +1,7 @@
-import { Controller, Get, Post, Put, Delete, Param, Body, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Delete, Param, Body, UseGuards } from '@nestjs/common';
 import { SeguimientoService } from './seguimiento.service';
 import { AuthGuard } from '@nestjs/passport';
+import { CreateSeguimientoDto } from './dto/create-seguimiento.dto';
 
 @Controller('seguimiento')
 export class SeguimientoController {
@@ -20,14 +21,8 @@ export class SeguimientoController {
 
   @UseGuards(AuthGuard('jwt'))
   @Post()
-  create(@Body() data: any) {
-    return this.seguimientoService.create(data);
-  }
-
-  @UseGuards(AuthGuard('jwt'))
-  @Put(':id')
-  update(@Param('id') id: string, @Body() data: any) {
-    return this.seguimientoService.update(id, data);
+  create(@Body() createSeguimientoDto: CreateSeguimientoDto) {
+    return this.seguimientoService.create(createSeguimientoDto);
   }
 
   @UseGuards(AuthGuard('jwt'))

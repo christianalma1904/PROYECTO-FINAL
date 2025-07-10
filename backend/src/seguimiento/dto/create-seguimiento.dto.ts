@@ -1,4 +1,13 @@
-import { IsString, IsNumber, IsArray, IsDateString } from 'class-validator';
+import { IsString, IsNumber, IsArray, IsDateString, ValidateNested } from 'class-validator';
+import { Type } from 'class-transformer';
+
+class MedidasDto {
+  @IsNumber()
+  cintura: number;
+
+  @IsNumber()
+  cadera: number;
+}
 
 export class CreateSeguimientoDto {
   @IsString()
@@ -10,12 +19,12 @@ export class CreateSeguimientoDto {
   @IsNumber()
   peso: number;
 
-  medidas: {
-    cintura: number;
-    cadera: number;
-  };
+  @ValidateNested()
+  @Type(() => MedidasDto)
+  medidas: MedidasDto;
 
   @IsArray()
+  @IsString({ each: true })
   fotos: string[];
 
   @IsDateString()

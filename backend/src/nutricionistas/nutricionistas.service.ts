@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Nutricionista } from './nutricionista.entity';
+import { CreateNutricionistaDto } from './dto/create-nutricionista.dto';
 
 @Injectable()
 export class NutricionistasService {
@@ -18,16 +19,9 @@ export class NutricionistasService {
     return this.nutricionistasRepo.findOneBy({ id });
   }
 
-  async create(data: Partial<Nutricionista>) {
+  async create(data: CreateNutricionistaDto) {
     const nutri = this.nutricionistasRepo.create(data);
     return this.nutricionistasRepo.save(nutri);
-  }
-
-  async update(id: number, data: Partial<Nutricionista>) {
-    await this.nutricionistasRepo.update(id, data);
-    const updated = await this.nutricionistasRepo.findOneBy({ id });
-    if (!updated) throw new NotFoundException('Nutricionista no encontrado');
-    return updated;
   }
 
   async remove(id: number) {

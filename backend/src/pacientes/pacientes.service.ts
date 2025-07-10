@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Paciente } from './paciente.entity';
+import { CreatePacienteDto } from './dto/create-paciente.dto';
 
 @Injectable()
 export class PacientesService {
@@ -18,16 +19,9 @@ export class PacientesService {
     return this.pacientesRepo.findOneBy({ id });
   }
 
-  async create(data: Partial<Paciente>) {
+  async create(data: CreatePacienteDto) {
     const paciente = this.pacientesRepo.create(data);
     return this.pacientesRepo.save(paciente);
-  }
-
-  async update(id: number, data: Partial<Paciente>) {
-    await this.pacientesRepo.update(id, data);
-    const updated = await this.pacientesRepo.findOneBy({ id });
-    if (!updated) throw new NotFoundException('Paciente no encontrado');
-    return updated;
   }
 
   async remove(id: number) {

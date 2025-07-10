@@ -1,6 +1,7 @@
-import { Controller, Get, Post, Put, Delete, Param, Body, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Delete, Param, Body, UseGuards } from '@nestjs/common';
 import { PagosService } from './pagos.service';
 import { AuthGuard } from '@nestjs/passport';
+import { CreatePagoDto } from './dto/create-pago.dto';
 
 @Controller('pagos')
 export class PagosController {
@@ -20,14 +21,8 @@ export class PagosController {
 
   @UseGuards(AuthGuard('jwt'))
   @Post()
-  create(@Body() data) {
-    return this.pagosService.create(data);
-  }
-
-  @UseGuards(AuthGuard('jwt'))
-  @Put(':id')
-  update(@Param('id') id: string, @Body() data) {
-    return this.pagosService.update(+id, data);
+  create(@Body() createPagoDto: CreatePagoDto) {
+    return this.pagosService.create(createPagoDto);
   }
 
   @UseGuards(AuthGuard('jwt'))

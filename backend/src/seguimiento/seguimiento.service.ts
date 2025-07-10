@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { CreateSeguimientoDto } from './dto/create-seguimiento.dto';
 
 @Injectable()
 export class SeguimientoService {
@@ -16,15 +17,9 @@ export class SeguimientoService {
     return doc;
   }
 
-  create(data: any) {
+  create(data: CreateSeguimientoDto) {
     const nuevo = new this.seguimientoModel(data);
     return nuevo.save();
-  }
-
-  async update(id: string, data: any) {
-    const updated = await this.seguimientoModel.findByIdAndUpdate(id, data, { new: true });
-    if (!updated) throw new NotFoundException('Seguimiento no encontrado');
-    return updated;
   }
 
   async remove(id: string) {
