@@ -1,7 +1,8 @@
-import { Controller, Get, Post, Delete, Param, Body, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Param, Body, UseGuards } from '@nestjs/common';
 import { NutricionistasService } from './nutricionistas.service';
 import { AuthGuard } from '@nestjs/passport';
 import { CreateNutricionistaDto } from './dto/create-nutricionista.dto';
+import { UpdateNutricionistaDto } from './dto/update-nutricionista.dto';
 
 @Controller('nutricionistas')
 export class NutricionistasController {
@@ -21,6 +22,12 @@ export class NutricionistasController {
   @Post()
   create(@Body() createNutricionistaDto: CreateNutricionistaDto) {
     return this.nutricionistasService.create(createNutricionistaDto);
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Put(':id')
+  update(@Param('id') id: string, @Body() updateNutricionistaDto: UpdateNutricionistaDto) {
+    return this.nutricionistasService.update(+id, updateNutricionistaDto);
   }
 
   @UseGuards(AuthGuard('jwt'))
