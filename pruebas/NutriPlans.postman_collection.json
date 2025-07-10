@@ -1,0 +1,165 @@
+{
+  "info": {
+    "name": "NutriPlans API",
+    "_postman_id": "12345678-abcd-efgh-ijkl-987654321000",
+    "description": "Colección completa para probar todos los endpoints del backend de NutriPlans.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "host",
+      "value": "localhost:3000"
+    }
+  ],
+  "item": [
+    {
+      "name": "Auth - Register",
+      "request": {
+        "method": "POST",
+        "header": [{"key": "Content-Type","value": "application/json"}],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nombre\": \"Juan\",\n  \"email\": \"juan@mail.com\",\n  \"password\": \"123456\"\n}"
+        },
+        "url": {
+          "raw": "http://{{host}}/auth/register",
+          "host": ["{{host}}"],
+          "path": ["auth", "register"]
+        }
+      }
+    },
+    {
+      "name": "Auth - Login",
+      "request": {
+        "method": "POST",
+        "header": [{"key": "Content-Type","value": "application/json"}],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"juan@mail.com\",\n  \"password\": \"123456\"\n}"
+        },
+        "url": {
+          "raw": "http://{{host}}/auth/login",
+          "host": ["{{host}}"],
+          "path": ["auth", "login"]
+        }
+      }
+    },
+    {
+      "name": "Planes - Get all",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "http://{{host}}/planes",
+          "host": ["{{host}}"],
+          "path": ["planes"]
+        }
+      }
+    },
+    {
+      "name": "Planes - Create",
+      "request": {
+        "method": "POST",
+        "header": [
+          {"key": "Authorization","value": "Bearer {{token}}"},
+          {"key": "Content-Type","value": "application/json"}
+        ],
+        "body": {"mode": "raw","raw": "{\n  \"nombre\": \"Plan Básico\",\n  \"descripcion\": \"Incluye asesorías\",\n  \"precio\": 29.99\n}"},
+        "url": {
+          "raw": "http://{{host}}/planes",
+          "host": ["{{host}}"],
+          "path": ["planes"]
+        }
+      }
+    },
+    {
+      "name": "Planes - Update",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {"key": "Authorization","value": "Bearer {{token}}"},
+          {"key": "Content-Type","value": "application/json"}
+        ],
+        "body": {"mode": "raw","raw": "{\n  \"nombre\": \"Plan Premium\",\n  \"descripcion\": \"Avanzado\",\n  \"precio\": 49.99\n}"},
+        "url": {
+          "raw": "http://{{host}}/planes/1",
+          "host": ["{{host}}"],
+          "path": ["planes", "1"]
+        }
+      }
+    },
+    {
+      "name": "Planes - Delete",
+      "request": {
+        "method": "DELETE",
+        "header": [{"key": "Authorization","value": "Bearer {{token}}"}],
+        "url": {
+          "raw": "http://{{host}}/planes/1",
+          "host": ["{{host}}"],
+          "path": ["planes", "1"]
+        }
+      }
+    },
+    {
+      "name": "Seguimiento - Get all",
+      "request": {
+        "method": "GET",
+        "header": [{"key": "Authorization","value": "Bearer {{token}}"}],
+        "url": {
+          "raw": "http://{{host}}/seguimiento",
+          "host": ["{{host}}"],
+          "path": ["seguimiento"]
+        }
+      }
+    },
+    {
+      "name": "Seguimiento - Create",
+      "request": {
+        "method": "POST",
+        "header": [
+          {"key": "Authorization","value": "Bearer {{token}}"},
+          {"key": "Content-Type","value": "application/json"}
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"paciente_id\": \"1\",\n  \"semana\": 1,\n  \"peso\": 70,\n  \"medidas\": {\"cintura\": 80, \"cadera\": 90},\n  \"fotos\": [\"url1\"],\n  \"fecha\": \"2025-07-10\"\n}"
+        },
+        "url": {
+          "raw": "http://{{host}}/seguimiento",
+          "host": ["{{host}}"],
+          "path": ["seguimiento"]
+        }
+      }
+    },
+    {
+      "name": "Dietas - Get all",
+      "request": {
+        "method": "GET",
+        "header": [{"key": "Authorization","value": "Bearer {{token}}"}],
+        "url": {
+          "raw": "http://{{host}}/dietas",
+          "host": ["{{host}}"],
+          "path": ["dietas"]
+        }
+      }
+    },
+    {
+      "name": "Dietas - Create",
+      "request": {
+        "method": "POST",
+        "header": [
+          {"key": "Authorization","value": "Bearer {{token}}"},
+          {"key": "Content-Type","value": "application/json"}
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"paciente_id\": \"1\",\n  \"plan_id\": \"1\",\n  \"semanas\": [{\"semana\": 1, \"menu\": [\"Desayuno: Avena\"]}] \n}"
+        },
+        "url": {
+          "raw": "http://{{host}}/dietas",
+          "host": ["{{host}}"],
+          "path": ["dietas"]
+        }
+      }
+    }
+  ]
+}
