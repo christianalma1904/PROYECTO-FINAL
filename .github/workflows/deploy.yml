@@ -19,7 +19,7 @@ jobs:
         username: ${{ secrets.VPS_USER }}
         key: ${{ secrets.VPS_KEY }}
         source: "."
-        target: "/root/nestjs-blog-backend"
+        target: "/root/alcocer_christian/nutricion-api"
 
     - name: Run deploy commands on VPS
       uses: appleboy/ssh-action@v1.0.3
@@ -28,7 +28,7 @@ jobs:
         username: ${{ secrets.VPS_USER }}
         key: ${{ secrets.VPS_KEY }}
         script: |
-          cd /root/nestjs-blog-backend
+          cd /root/alcocer_christian/nutricion-api
           
           # Matar el proceso que está usando el puerto 3100
           echo "Matar proceso en el puerto 3100..."
@@ -42,6 +42,6 @@ jobs:
           npm run build
           
           # Reiniciar PM2 con el nuevo código
-          pm2 stop nestjs-blog-backend-api || true  # Detener el proceso si está en ejecución
-          pm2 delete nestjs-blog-backend-api || true  # Eliminar el proceso si ya está activo
-          pm2 start dist/main.js --name nestjs-blog-backend-api  # Iniciar el proceso desde el archivo compilado
+          pm2 stop nutricion-api || true  # Detener el proceso si está en ejecución
+          pm2 delete nutricion-api || true  # Eliminar el proceso si ya está activo
+          pm2 start dist/main.js --name nutricion-api  # Iniciar el proceso desde el archivo compilado
