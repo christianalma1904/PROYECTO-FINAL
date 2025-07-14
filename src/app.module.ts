@@ -9,6 +9,8 @@ import { NutricionistasModule } from './nutricionistas/nutricionistas.module';
 import { SeguimientoModule } from './seguimiento/seguimiento.module';
 import { DietasModule } from './dietas/dietas.module';
 import { AuthModule } from './auth/auth.module';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
 
 @Module({
   imports: [
@@ -50,7 +52,7 @@ import { AuthModule } from './auth/auth.module';
     DietasModule,
     AuthModule,
   ],
-  controllers: [],
-  providers: [],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {}
