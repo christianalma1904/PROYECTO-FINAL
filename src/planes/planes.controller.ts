@@ -1,7 +1,8 @@
-import { Controller, Get, Post, Delete, Param, Body, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Delete, Put, Param, Body, UseGuards } from '@nestjs/common';
 import { PlanesService } from './planes.service';
 import { AuthGuard } from '@nestjs/passport';
 import { CreatePlanDto } from './dto/create-plan.dto';
+import { UpdatePlanDto } from './dto/update-plan.dto';
 
 @Controller('planes')
 export class PlanesController {
@@ -21,6 +22,12 @@ export class PlanesController {
   @Post()
   create(@Body() createPlanDto: CreatePlanDto) {
     return this.planesService.create(createPlanDto);
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Put(':id')
+  update(@Param('id') id: string, @Body() updatePlanDto: UpdatePlanDto) {
+    return this.planesService.update(+id, updatePlanDto);
   }
 
   @UseGuards(AuthGuard('jwt'))
