@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+
 import { PlanesModule } from './planes/planes.module';
 import { PacientesModule } from './pacientes/pacientes.module';
 import { PagosModule } from './pagos/pagos.module';
@@ -9,8 +10,10 @@ import { NutricionistasModule } from './nutricionistas/nutricionistas.module';
 import { SeguimientoModule } from './seguimiento/seguimiento.module';
 import { DietasModule } from './dietas/dietas.module';
 import { AuthModule } from './auth/auth.module';
+
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './auth/jwt-auth.guard';
 import { RolesGuard } from './common/guards/roles.guard';
@@ -21,13 +24,13 @@ import { RolesGuard } from './common/guards/roles.guard';
       isGlobal: true,
       envFilePath: '.env',
     }),
+
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => {
-        const databaseUrl = configService.get<string>('DATABASE_URL');
         return {
           type: 'postgres',
-          url: databaseUrl,
+          url: configService.get<string>('DATABASE_URL'),
           autoLoadEntities: true,
           synchronize: true,
           ssl: { rejectUnauthorized: false },
@@ -35,6 +38,7 @@ import { RolesGuard } from './common/guards/roles.guard';
       },
       inject: [ConfigService],
     }),
+
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
@@ -42,6 +46,8 @@ import { RolesGuard } from './common/guards/roles.guard';
       }),
       inject: [ConfigService],
     }),
+
+    // Módulos de negocio
     PlanesModule,
     PacientesModule,
     PagosModule,
@@ -50,6 +56,7 @@ import { RolesGuard } from './common/guards/roles.guard';
     DietasModule,
     AuthModule,
   ],
+
   controllers: [AppController],
   providers: [
     AppService,
