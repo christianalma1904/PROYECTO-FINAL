@@ -1,17 +1,19 @@
-// src/auth/auth.controller.ts
 import { Controller, Post, Body } from '@nestjs/common';
 import { AuthService } from './auth.service';
+import { Public } from '../decorators/public.decorator';
 
-@Controller('auth') // <-- Prefijo de controlador 'auth'
+@Controller('auth')
 export class AuthController {
-  constructor(private authService: AuthService) {}
+  constructor(private readonly authService: AuthService) {}
 
-  @Post('register') // <-- Ruta '/register' dentro del prefijo 'auth'
+  @Public()
+  @Post('register')
   register(@Body() dto: { nombre: string; email: string; password: string }) {
     return this.authService.register(dto);
   }
 
-  @Post('login') // <-- Ruta '/login' dentro del prefijo 'auth'
+  @Public()
+  @Post('login')
   login(@Body() dto: { email: string; password: string }) {
     return this.authService.login(dto);
   }
