@@ -11,6 +11,9 @@ import { DietasModule } from './dietas/dietas.module';
 import { AuthModule } from './auth/auth.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { APP_GUARD } from '@nestjs/core';
+import { JwtAuthGuard } from './auth/jwt-auth.guard';
+import { RolesGuard } from './common/guards/roles.guard';
 
 @Module({
   imports: [
@@ -27,21 +30,16 @@ import { AppService } from './app.service';
           url: databaseUrl,
           autoLoadEntities: true,
           synchronize: true,
-          ssl: {
-            rejectUnauthorized: false,
-          },
+          ssl: { rejectUnauthorized: false },
         };
       },
       inject: [ConfigService],
     }),
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
-      useFactory: (configService: ConfigService) => {
-        const mongoUri = configService.get<string>('MONGO_URI');
-        return {
-          uri: mongoUri,
-        };
-      },
+      useFactory: (configService: ConfigService) => ({
+        uri: configService.get<string>('MONGO_URI'),
+      }),
       inject: [ConfigService],
     }),
     PlanesModule,
@@ -53,6 +51,16 @@ import { AppService } from './app.service';
     AuthModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
+    },
+  ],
 })
 export class AppModule {}

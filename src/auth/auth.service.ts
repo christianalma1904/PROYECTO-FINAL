@@ -30,9 +30,12 @@ export class AuthService {
     const match = await bcrypt.compare(dto.password, paciente.password);
     if (!match) throw new UnauthorizedException('Credenciales inválidas');
 
-    const payload = { sub: paciente.id, role: paciente.rol };
-    const token = this.jwtService.sign(payload);
+    const payload = {
+      sub: paciente.id,
+      role: paciente.rol,
+    };
 
+    const token = this.jwtService.sign(payload);
     return { access_token: token };
   }
 }
