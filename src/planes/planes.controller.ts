@@ -1,16 +1,27 @@
-import { Controller, Get, Post, Delete, Put, Param, Body, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Delete,
+  Put,
+  Param,
+  Body,
+  UseGuards
+} from '@nestjs/common';
 import { PlanesService } from './planes.service';
 import { CreatePlanDto } from './dto/create-plan.dto';
 import { UpdatePlanDto } from './dto/update-plan.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { RolesGuard } from '../common/guards/roles.guard';
 import { Roles } from '../common/decorators/roles.decorator';
+import { Public } from '../common/decorators/public.decorator';
 
 @Controller('planes')
 @UseGuards(JwtAuthGuard, RolesGuard)
 export class PlanesController {
   constructor(private readonly planesService: PlanesService) {}
 
+  @Public()
   @Get()
   findAll() {
     return this.planesService.findAll();
