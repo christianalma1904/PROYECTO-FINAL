@@ -6,10 +6,19 @@ import { UpdateDietaDto } from './dto/update-dieta.dto';
 
 @Injectable()
 export class DietasService {
-  constructor(@InjectModel('Dieta') private dietaModel: Model<any>) {}
+  constructor(@InjectModel('Dieta') private dietaModel: Model<any>) {} // 'any' es un placeholder, usa tu interfaz de Dieta de Mongoose si la tienes
 
   findAll() {
-    return this.dietaModel.find();
+    return this.dietaModel.find(); // Este sigue devolviendo todas si no se llama con filtro
+  }
+
+  // Nuevo método para encontrar dietas por paciente_id
+  async findByPacienteId(pacienteId: string) {
+    // Asume que tu esquema de Dieta en Mongoose tiene un campo llamado 'paciente_id'
+    // que almacena el ID del paciente.
+    console.log(`[DietasService] Filtrando dietas por paciente_id: ${pacienteId}`);
+    const dietas = await this.dietaModel.find({ paciente_id: pacienteId }).exec(); // <-- ¡FILTRADO CRUCIAL AQUÍ!
+    return dietas;
   }
 
   async findOne(id: string) {
