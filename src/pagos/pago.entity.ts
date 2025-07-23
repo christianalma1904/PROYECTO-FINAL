@@ -7,15 +7,16 @@ export class Pago {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => Paciente, paciente => paciente.id)
+  @ManyToOne(() => Paciente)
   paciente: Paciente;
 
-  @ManyToOne(() => Plan, plan => plan.id)
+  @ManyToOne(() => Plan)
   plan: Plan;
 
   @Column('decimal')
   monto: number;
 
-  @Column()
+  // CAMBIO AQUÍ: Permitir valores nulos para la columna fecha
+  @Column({ type: 'date', nullable: true })
   fecha: Date;
 }
