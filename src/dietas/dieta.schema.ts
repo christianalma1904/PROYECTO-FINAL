@@ -1,18 +1,33 @@
-import { Schema } from 'mongoose';
+// src/dietas/dieta.schema.ts
 
-export const DietaSchema = new Schema({
-  paciente_id: { type: String, required: true }, // Asumo que paciente_id es siempre requerido
-  plan_id: { type: String, required: false }, // Lo dejo como opcional, ajusta si es requerido
+import { Schema, Document } from 'mongoose'; // Importa Document
+
+// 1. Define la interfaz Dieta que extiende Document de Mongoose
+export interface Dieta extends Document {
+  paciente_id: string;
+  plan_id?: string; // Opcional
+  semanas: {
+    semana: number;
+    menu: string[];
+  }[];
+  nombre?: string; // Opcional, según tu esquema
+  descripcion?: string; // Opcional
+  fechaAsignacion?: Date; // Opcional
+}
+
+// 2. Define tu esquema de Mongoose (esto ya lo tenías)
+export const DietaSchema = new Schema<Dieta>({ // Añade <Dieta> para tipar el esquema
+  paciente_id: { type: String, required: true },
+  plan_id: { type: String, required: false },
   semanas: [
     {
-      semana: { type: Number, required: true }, // Asumo que semana es siempre requerido para cada entrada
-      menu: [{ type: String, required: true }], // Asumo que cada entrada de menú es requerida
+      semana: { type: Number, required: true },
+      menu: [{ type: String, required: true }],
     },
   ],
-  // ¡AÑADE ESTOS CAMPOS AQUÍ!
-  nombre: { type: String, required: false }, // Añade 'required: true' si debe ser obligatorio al crear
-  descripcion: { type: String, required: false }, // Añade 'required: true' si debe ser obligatorio
-  fechaAsignacion: { type: Date, required: false }, // Usa Date para fechas. Añade 'required: true' si debe ser obligatorio
+  nombre: { type: String, required: false },
+  descripcion: { type: String, required: false },
+  fechaAsignacion: { type: Date, required: false },
 }, {
-  timestamps: true // Esto añadirá `createdAt` y `updatedAt` automáticamente a tus documentos
+  timestamps: true
 });

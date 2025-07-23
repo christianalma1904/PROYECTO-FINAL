@@ -3,43 +3,42 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateDietaDto } from './dto/create-dieta.dto';
 import { UpdateDietaDto } from './dto/update-dieta.dto';
+import { Dieta } from './dieta.schema'; // Importa la interfaz Dieta si la tienes definida
 
 @Injectable()
 export class DietasService {
-  constructor(@InjectModel('Dieta') private dietaModel: Model<any>) {} // 'any' es un placeholder, usa tu interfaz de Dieta de Mongoose si la tienes
+  constructor(@InjectModel('Dieta') private dietaModel: Model<Dieta>) {} // Usa Model<Dieta> si Dieta es tu interfaz/clase
 
   findAll() {
-    return this.dietaModel.find(); // Este sigue devolviendo todas si no se llama con filtro
+    return this.dietaModel.find().exec(); // .exec() asegura que devuelve una Promise
   }
 
-  // Nuevo método para encontrar dietas por paciente_id
-  async findByPacienteId(pacienteId: string) {
-    // Asume que tu esquema de Dieta en Mongoose tiene un campo llamado 'paciente_id'
-    // que almacena el ID del paciente.
+  // Este método ya lo tenías, lo mantenemos igual
+  async findByPacienteId(pacienteId: string): Promise<Dieta[]> {
     console.log(`[DietasService] Filtrando dietas por paciente_id: ${pacienteId}`);
-    const dietas = await this.dietaModel.find({ paciente_id: pacienteId }).exec(); // <-- ¡FILTRADO CRUCIAL AQUÍ!
+    const dietas = await this.dietaModel.find({ paciente_id: pacienteId }).exec();
     return dietas;
   }
 
-  async findOne(id: string) {
-    const doc = await this.dietaModel.findById(id);
+  async findOne(id: string): Promise<Dieta> {
+    const doc = await this.dietaModel.findById(id).exec();
     if (!doc) throw new NotFoundException('Dieta no encontrada');
     return doc;
   }
 
-  create(data: CreateDietaDto) {
+  create(data: CreateDietaDto): Promise<Dieta> {
     const nueva = new this.dietaModel(data);
     return nueva.save();
   }
 
-  async update(id: string, data: UpdateDietaDto) {
-    const updated = await this.dietaModel.findByIdAndUpdate(id, data, { new: true });
+  async update(id: string, data: UpdateDietaDto): Promise<Dieta> {
+    const updated = await this.dietaModel.findByIdAndUpdate(id, data, { new: true }).exec();
     if (!updated) throw new NotFoundException('Dieta no encontrada');
     return updated;
   }
 
-  async remove(id: string) {
-    const deleted = await this.dietaModel.findByIdAndDelete(id);
+  async remove(id: string): Promise<{ message: string }> {
+    const deleted = await this.dietaModel.findByIdAndDelete(id).exec();
     if (!deleted) throw new NotFoundException('Dieta no encontrada');
     return { message: 'Dieta eliminada' };
   }
