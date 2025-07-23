@@ -1,7 +1,8 @@
-import { Controller, Get, Post, Delete, Param, Body, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Delete, Put, Param, Body, UseGuards } from '@nestjs/common';
 import { PacientesService } from './pacientes.service';
 import { AuthGuard } from '@nestjs/passport';
 import { CreatePacienteDto } from './dto/create-paciente.dto';
+import { UpdatePacienteDto } from './dto/update-paciente.dto'; // 👈 Agrega esto
 
 @Controller('pacientes')
 export class PacientesController {
@@ -21,6 +22,12 @@ export class PacientesController {
   @Post()
   create(@Body() createPacienteDto: CreatePacienteDto) {
     return this.pacientesService.create(createPacienteDto);
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Put(':id') // 👈 Nuevo endpoint para actualizar
+  update(@Param('id') id: string, @Body() updatePacienteDto: UpdatePacienteDto) {
+    return this.pacientesService.update(+id, updatePacienteDto);
   }
 
   @UseGuards(AuthGuard('jwt'))
